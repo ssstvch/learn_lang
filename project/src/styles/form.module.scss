@@ -1,0 +1,19 @@
+@import './App.scss';
+
+.logotype {
+    width: 10vw;
+    margin: 1vw auto 0 auto;
+    .image {
+        width: 100%;
+    }
+}
+
+.text {
+    width: 9.4vw;
+    margin-left: 8vw !important;
+    font-size: 0.9rem !important;
+}
+
+.signUp {
+    padding: 0 !important;
+}
