@@ -1,11 +1,22 @@
 import React from 'react';
-import Form from './Form'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Header from './Header'
 import '../styles/App.scss';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+        main: '#2C346B',
+    },
+  },
+});
 
 function App() {
   return (
     <React.Fragment>
-      <Form />
+      <ThemeProvider theme={theme}>
+        <Header />
+      </ThemeProvider>
     </React.Fragment>
   );
 }

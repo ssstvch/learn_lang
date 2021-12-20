@@ -1,33 +1,62 @@
 import React from 'react';
-import MenuList from "./MenuList";
+import {
+    Container,
+    AppBar,
+    Toolbar,
+    CardMedia,
+    IconButton
+} from '@mui/material/';
+import { AccountCircle } from '@mui/icons-material';
+import MenuIcon from '@mui/icons-material/Menu'
+import LeftMenu from './LeftMenu';
+import RightMenu from './RightMenu';
 
-const links = [
-    {special: "new-words", href: "#", text: "Learn new words"},
-    {special: "training", href: "#", text: "Training"},
-    {special: "word-list", href: "#", text: "Your word list"},
-    {special: "language", href: "#", text: "Change language"},
-    {special: "user-menu", href: "#", text: "User", user: true}
-]
 
-const Header = (props) => {
-    const {src} = props;
+const Header = () => {
+    const [isRightMenuOpen, setRightMenuOpen] = React.useState(false);
+    const [isLeftMenuOpen, setLeftMenuOpen] = React.useState(false);
+
     return (
         <React.Fragment>
-            <header className={`header`}>
-                <div className={`header__logo`}>
-                    <h1 className={`hidden`}>Logotype</h1>
-                    <img className={`header__image`} src={src} />
-                </div>
-                <nav className={`header__menu`}>
-                    <ul className={`header__ul`}>
-                        {
-                            links.map((link) => {
-                                <MenuList special={link.special} href={link.href} text={link.text} user={link.user}/>
-                            })
-                        }
-                    </ul>
-                </nav>
-            </header>
+                <AppBar position="static">
+                <Container>
+                    <Toolbar>
+                    <IconButton
+                        size="large"
+                        color="inherit"
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                        <Container
+                            sx={{m:"1vw 19vw"}}
+                        >
+                            <CardMedia
+                                component="img"
+                                height="50%"
+                                width="50%"
+                                image="/images/header_logo.png"
+                                alt="Learn languages"
+                            />
+                        </Container>
+                        <IconButton
+                            size="large"
+                            color="inherit"
+                            sx={{flexGrow:1}}
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                    </Toolbar>
+                    </Container>
+                </AppBar>
+
+            <LeftMenu 
+                openRightMenu={isLeftMenuOpen}
+                closeRightMenu={() => setLeftMenuOpen(false)}
+            />
+            <RightMenu 
+                openRightMenu={isRightMenuOpen}
+                closeRightMenu={() => setRightMenuOpen(false)}
+            />
         </React.Fragment>
     )
 }
