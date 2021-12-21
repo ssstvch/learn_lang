@@ -1,9 +1,21 @@
+import { Typography } from '@mui/material';
 import React from 'react';
 
-const Title = () => {
+const Title = ({text}) => {
     return (
         <React.Fragment>
-            <h1 className={`title`}></h1>
+            <Typography
+                variant="h3"
+                component="h1"
+                align="center"
+                sx={{
+                    m: "3vw auto 2vw auto",
+                    fontWeight: '300',
+                    letterSpacing: '0.1vw'
+                }}
+            >
+                {text}
+            </Typography>
         </React.Fragment>
     )
 }
