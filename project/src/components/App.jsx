@@ -2,6 +2,7 @@ import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header'
 import '../styles/App.scss';
+import NewWords from './NewWords';
 
 const theme = createTheme({
   palette: {
@@ -16,6 +17,7 @@ function App() {
     <React.Fragment>
       <ThemeProvider theme={theme}>
         <Header />
+        <NewWords />
       </ThemeProvider>
     </React.Fragment>
   );
