@@ -1,4 +1,8 @@
-.MuiInput-root {
-    font-size: 0.9rem !important;
-    margin: 0.72vw 0;
+.tablecell {
+    &__input div {
+        font-size: 0.72vw !important;
+    }
+    &__icons div {
+        padding: 0 !important;
+    }
 }

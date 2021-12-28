@@ -13,9 +13,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import DoneIcon from '@mui/icons-material/Done';
 
-const tableCellStyle = [{width: '8.5vw', p:'1.2vw 0.7vw'}];
-const tableCellBigStyle = [{width: '8.5vw', p:'1.2vw 0.7vw'}];
-
 
 const WordRow = ({word, translate, transcription, theme, explanation}) => {
 
@@ -31,11 +28,12 @@ const WordRow = ({word, translate, transcription, theme, explanation}) => {
                 {
                     redrow
                     ? <TableRow>
-                        <TableCell className={`tablecell`} component="th" scope="row">
+                        <TableCell className={`tablecell`}>
                             <TextField 
                                 size="small"
                                 variant="standard" 
                                 defaultValue={word}
+                                className={`tablecell__input`}
                             />
                         </TableCell>
                         <TableCell className={`tablecell`}  >
@@ -43,6 +41,7 @@ const WordRow = ({word, translate, transcription, theme, explanation}) => {
                                 size="small"
                                 variant="standard" 
                                 defaultValue={translate} 
+                                className={`tablecell__input`}
                             />
                         </TableCell>
                         <TableCell className={`tablecell`} >
@@ -50,6 +49,7 @@ const WordRow = ({word, translate, transcription, theme, explanation}) => {
                                 size="small" 
                                 variant="standard" 
                                 defaultValue={transcription}
+                                className={`tablecell__input`}
                             />
                         </TableCell>
                         <TableCell className={`tablecell`} >
@@ -57,18 +57,20 @@ const WordRow = ({word, translate, transcription, theme, explanation}) => {
                                 size="small" 
                                 variant="standard" 
                                 defaultValue={theme} 
+                                className={`tablecell__input`}
                             />
                         </TableCell>
-                        <TableCell className={`tablecell_big`} >
+                        <TableCell className={`tablecell tablecell_big`} >
                             <TextField 
                                 size="small" 
                                 variant="standard" 
                                 multiline
                                 sx= {{width: "100%"}}
                                 defaultValue={explanation}
+                                className={`tablecell__input`}
                             />
                         </TableCell>
-                        <TableCell className={`tablecell_icons`} >
+                        <TableCell className={`tablecell__icons`} >
                         <Container>
                         <IconButton>
                             <DoneIcon 
@@ -84,12 +86,12 @@ const WordRow = ({word, translate, transcription, theme, explanation}) => {
                         </TableCell>
                     </TableRow>
                     : <TableRow>
-                        <TableCell sx={tableCellStyle} className={`tablecell`} component="th" scope="row">{word}</TableCell>
-                        <TableCell sx={tableCellStyle} className={`tablecell`} >{translate}</TableCell>
-                        <TableCell sx={tableCellStyle} className={`tablecell`} >{transcription}</TableCell>
-                        <TableCell sx={tableCellStyle} className={`tablecell`} >{theme}</TableCell>
-                        <TableCell sx={tableCellBigStyle} className={`tablecell_big`} >{explanation}</TableCell>
-                        <TableCell sx={tableCellStyle} className={`tablecell_icons`} >
+                        <TableCell className={`tablecell`} >{word}</TableCell>
+                        <TableCell className={`tablecell`} >{translate}</TableCell>
+                        <TableCell className={`tablecell`} >{transcription}</TableCell>
+                        <TableCell className={`tablecell`} >{theme}</TableCell>
+                        <TableCell className={`tablecell_big`} >{explanation}</TableCell>
+                        <TableCell className={`tablecell__icons`} >
                             <Container>
                                 <IconButton>
                                     <EditIcon 

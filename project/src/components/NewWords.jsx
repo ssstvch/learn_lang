@@ -82,9 +82,8 @@ const words = [
     },
 ]
 
-const tableCellStyle = [{width:'5vw', p:'1.2vw 0.7vw'}];
-const tableCellBigStyle = [{width:'10vw', p:'1.2vw 0.7vw'}];
-const textFieldStyle = [{ width: '100%' }];
+const tableCellStyle = [{width:'9vw', p:'1.2vw 0.7vw'}];
+const tableCellBigStyle = [{width:'15vw', p:'1.2vw 0.7vw'}];
 
 const NewWords = () => (
     <React.Fragment>
@@ -97,7 +96,7 @@ const NewWords = () => (
                         <TableCell sx={tableCellStyle}><b>Transcription</b></TableCell>
                         <TableCell sx={tableCellStyle}><b>Theme</b></TableCell>
                         <TableCell sx={tableCellBigStyle}><b>Explanation</b></TableCell>
-                        {/* <TableCell sx={tableCellStyle}>{` `}</TableCell> */}
+                        <TableCell sx={{width: "6vw"}}>{` `}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -112,20 +111,6 @@ const NewWords = () => (
                             explanation={word.explanation} 
                         />);
                     })}
-                    {/* <WordRow
-                        word={words[0].word}
-                        translate={words[0].translate}
-                        transcription={words[0].transcription}
-                        theme={words[0].theme}
-                        explanation={words[0].explanation} />
-
-
-                    <WordRow
-                        word={words[1].word}
-                        translate={words[1].translate}
-                        transcription={words[1].transcription}
-                        theme={words[1].theme}
-                        explanation={words[1].explanation} /> */}
                 </TableBody>
             </Table>
         </Container>
