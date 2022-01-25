@@ -17,7 +17,7 @@ const tableCellBigStyle = [{ width: "15vw", p: "1.2vw 0.7vw" }];
 
 const NewWords = () => {
   return (
-    <Container sx={{ mt: "2vw" }} component={Paper}>
+    <Container sx={{ mt: "8vw" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>

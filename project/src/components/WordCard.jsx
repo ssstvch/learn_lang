@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import ButtonLeaf from "./ButtonLeaf";
+import Title from "./Title";
 
 const WordCard = ({ theme, word, transcription, translate, explanation }) => {
   const [prompt, setPrompt] = React.useState(false);
@@ -25,84 +26,86 @@ const WordCard = ({ theme, word, transcription, translate, explanation }) => {
   };
 
   return (
-    <Container>
-      <Card
-        variant="outlined"
-        sx={{
-          width: "25vw",
-          m: "0 auto",
-          p: "2vw 2vw 1vw 2vw",
-        }}
-      >
-        <Typography
-          component="h2"
-          color="text.secondary"
-          sx={{ fontSize: "0.7vw" }}
-        >
-          {theme}
-        </Typography>
-
-        <Typography variant="h5" component="div">
-          {word}
-        </Typography>
-
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {transcription}
-        </Typography>
-
-        <CardActions
+    <React.Fragment>
+      <Container>
+        <Card
+          variant="outlined"
           sx={{
-            justifyContent: "end",
-            p: 0,
+            width: "25vw",
+            m: "0 auto",
+            p: "2vw 2vw 1vw 2vw",
           }}
         >
-          <Button
-            expand={prompt.toString()}
-            onClick={handlePromptClick}
-            aria-expanded={prompt}
-            aria-label="show prompt"
+          <Typography
+            component="h2"
+            color="text.secondary"
+            sx={{ fontSize: "0.7vw" }}
           >
-            prompt
-          </Button>
+            {theme}
+          </Typography>
 
-          <Button
-            expand={translateWord.toString()}
-            onClick={handleTranslateClick}
-            aria-expanded={translateWord}
-            aria-label="show translate"
+          <Typography variant="h5" component="div">
+            {word}
+          </Typography>
+
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            {transcription}
+          </Typography>
+
+          <CardActions
+            sx={{
+              justifyContent: "end",
+              p: 0,
+            }}
           >
-            translate
-          </Button>
-        </CardActions>
+            <Button
+              expand={prompt.toString()}
+              onClick={handlePromptClick}
+              aria-expanded={prompt}
+              aria-label="show prompt"
+            >
+              prompt
+            </Button>
 
-        <Collapse in={prompt}>
-          <CardContent>
-            <Typography>{explanation}</Typography>
-          </CardContent>
-        </Collapse>
+            <Button
+              expand={translateWord.toString()}
+              onClick={handleTranslateClick}
+              aria-expanded={translateWord}
+              aria-label="show translate"
+            >
+              translate
+            </Button>
+          </CardActions>
 
-        <Collapse in={translateWord}>
-          <CardContent>
-            <Typography variant="h6" component="span" color="text.secondary">
-              translate:
-            </Typography>
-            <Typography>{translate}</Typography>
-          </CardContent>
-        </Collapse>
-      </Card>
+          <Collapse in={prompt}>
+            <CardContent>
+              <Typography>{explanation}</Typography>
+            </CardContent>
+          </Collapse>
 
-      <Container
-        sx={{
-          width: "25vw",
-          m: "1vw auto",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <ButtonLeaf color="warning" text="Don't know" />
-        <ButtonLeaf color="info" text="Know" />
+          <Collapse in={translateWord}>
+            <CardContent>
+              <Typography variant="h6" component="span" color="text.secondary">
+                translate:
+              </Typography>
+              <Typography>{translate}</Typography>
+            </CardContent>
+          </Collapse>
+        </Card>
+
+        <Container
+          sx={{
+            width: "25vw",
+            m: "1vw auto",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <ButtonLeaf color="warning" text="Don't know" />
+          <ButtonLeaf color="info" text="Know" />
+        </Container>
       </Container>
-    </Container>
+    </React.Fragment>
   );
 };
 

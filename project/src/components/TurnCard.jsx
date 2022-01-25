@@ -2,6 +2,7 @@ import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import { Grid, IconButton, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import WordCard from "./WordCard";
+import Title from "./Title";
 import { words } from "../data/words";
 
 const TurnCard = ({ index }) => {
@@ -23,6 +24,7 @@ const TurnCard = ({ index }) => {
 
   return (
     <React.Fragment>
+      <Title text={"Word Card"} />
       <Grid
         sx={{
           m: "0 auto",
@@ -36,8 +38,10 @@ const TurnCard = ({ index }) => {
         <IconButton onClick={prevCard}>
           <ArrowBackIosNew />
         </IconButton>
-        {
-          (words[card] === undefined) ? alert(`Карточки не получены`) : <WordCard
+        {words[card] === undefined ? (
+          alert(`Карточки не получены`)
+        ) : (
+          <WordCard
             key={words[card].id}
             word={words[card].word}
             transcription={words[card].transcription}
@@ -45,14 +49,15 @@ const TurnCard = ({ index }) => {
             explanation={words[card].explanation}
             theme={words[card].theme}
           />
-        }
+        )}
         <IconButton onClick={nextCard}>
           <ArrowForwardIos />
         </IconButton>
       </Grid>
-      <Typography component="div" sx={{ textAlign: "center", m: "1vw auto" }}>{`${
-        card + 1
-      }/${words.length}`}</Typography>
+      <Typography
+        component="div"
+        sx={{ textAlign: "center", m: "1vw auto" }}
+      >{`${card + 1}/${words.length}`}</Typography>
     </React.Fragment>
   );
 };

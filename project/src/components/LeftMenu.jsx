@@ -1,55 +1,39 @@
-import React from "react"; 
+import React from "react";
 import {
   Drawer,
   List,
-  Divider,
   ListItem,
-  IconButton,
   ListItemIcon,
-  ListItemText
+  ListItemText,
 } from "@mui/material";
-import {
-  ChangeCircle,
-  School,
-  FitnessCenter,
-  FormatListBulleted
-} from "@mui/icons-material";
+import { FitnessCenter, FormatListBulleted } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
-const LeftMenu = ({openLeftMenu, closeLeftMenu}) => {
+const LeftMenu = ({ openLeftMenu, closeLeftMenu, gamePath, homePath }) => {
+  const leftMenuList = [
+    { id: "01", name: "Training", path: `/game` },
+    { id: "02", name: "Your words list", path: `/` },
+  ];
+
   return (
-        <React.Fragment>
-            <Drawer
-              anchor="left"
-              open={openLeftMenu}
-              onClose={closeLeftMenu}
-            >
-              <List>
-                  {["Learn new words", "Training", "Your word list"].map(
-                    (text, index) => (
-                      <ListItem button key={text}>
-                        <ListItemIcon>
-                          {index === 0 && <School />}
-                          {index === 1 && <FitnessCenter />}
-                          {index === 2 && <FormatListBulleted />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                      </ListItem>
-                    )
-                  )}
-              </List>
-              <Divider />
-              <List>
-                  <ListItem key={"changeLanguage"}>
-                      <ListItemIcon>
-                        <ChangeCircle />
-                      </ListItemIcon>
-                      <ListItemText primary="Change language" />
-                  </ListItem>
-              </List>
-            </Drawer>
-      </React.Fragment>
-
+    <React.Fragment>
+      <Drawer anchor="left" open={openLeftMenu} onClose={closeLeftMenu}>
+        <List>
+          {leftMenuList.map((_, index) => (
+            <Link to={_.path}>
+              <ListItem button key={_.id} sx={{ paddingRight: "3vw" }}>
+                <ListItemIcon>
+                  {index === 0 && <FitnessCenter />}
+                  {index === 1 && <FormatListBulleted />}
+                </ListItemIcon>
+                <ListItemText primary={_.name} />
+              </ListItem>
+            </Link>
+          ))}
+        </List>
+      </Drawer>
+    </React.Fragment>
   );
-}
+};
 
-export default LeftMenu
+export default LeftMenu;
