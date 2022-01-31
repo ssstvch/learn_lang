@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/newWords.scss";
+import "../styles/_newWords.scss";
 import {
   Container,
   TableRow,
@@ -12,14 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import DoneIcon from "@mui/icons-material/Done";
 
-const WordRow = ({
-  word,
-  translate,
-  transcription,
-  theme,
-  explanation,
-  id,
-}) => {
+const WordRow = ({ word, translate, transcription, theme, id }) => {
   const [redrow, setRedrow] = React.useState(false);
   const [inputText, setInputText] = React.useState(-1);
 
@@ -83,16 +76,6 @@ const WordRow = ({
               className={`tablecell__input ${`${word}-${id}`}`}
             />
           </TableCell>
-          <TableCell className={`tablecell tablecell_big`}>
-            <TextField
-              size="small"
-              variant="standard"
-              multiline
-              sx={{ width: "100%" }}
-              defaultValue={explanation}
-              className={`tablecell__input ${`${word}-${id}`}`}
-            />
-          </TableCell>
           <TableCell className={`tablecell__icons`}>
             <Container>
               <IconButton data-id={`${word}-${id}`} onClick={handleChange}>
@@ -110,7 +93,6 @@ const WordRow = ({
           <TableCell className={`tablecell`}>{translate}</TableCell>
           <TableCell className={`tablecell`}>{transcription}</TableCell>
           <TableCell className={`tablecell`}>{theme}</TableCell>
-          <TableCell className={`tablecell_big`}>{explanation}</TableCell>
           <TableCell className={`tablecell__icons`}>
             <Container>
               <IconButton onClick={handleRowClick}>

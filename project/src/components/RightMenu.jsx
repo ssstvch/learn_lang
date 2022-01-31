@@ -19,7 +19,7 @@ const RightMenu = ({ openRightMenu, closeRightMenu }) => {
     <React.Fragment key={"rightMenu"}>
       <Drawer anchor="right" open={openRightMenu} onClose={closeRightMenu}>
         <List>
-          <Link to={rightMenuList[0].path}>
+          <Link to={rightMenuList[0].path} onClick={closeRightMenu}>
             <ListItem>
               <ListItemIcon key={rightMenuList[0].id}>
                 <Settings />
@@ -28,7 +28,7 @@ const RightMenu = ({ openRightMenu, closeRightMenu }) => {
             </ListItem>
           </Link>
           <Divider />
-          <Link to={rightMenuList[1].path}>
+          <Link to={rightMenuList[1].path} onClick={closeRightMenu}>
             <ListItem key={rightMenuList[1].id}>
               <ListItemIcon>
                 <Logout />

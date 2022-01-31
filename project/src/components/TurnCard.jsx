@@ -1,26 +1,111 @@
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
-import { Grid, IconButton, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import { Grid, IconButton, Typography, Container, Button } from "@mui/material";
+import React, { useState } from "react";
 import WordCard from "./WordCard";
 import Title from "./Title";
 import { words } from "../data/words";
 
+const buttons = [
+  {
+    id: "01",
+    text: "Don't know",
+    color: "warning",
+    size: "large",
+    variant: "contained",
+  },
+  {
+    id: "02",
+    text: "Know",
+    color: "info",
+    size: "large",
+    variant: "outlined",
+  },
+];
+
+let counter = undefined;
+
 const TurnCard = ({ index }) => {
-  const [card, setCard] = React.useState(index ?? 0);
+  const [card, setCard] = useState(index ?? 0);
+  const [selectedButton, setSelectedButton] = useState(-1);
+  const [wordsCount, setWordsCount] = useState(0);
+
+  const increaseCounterState = () => {
+    setWordsCount(wordsCount + 1);
+    return wordsCount + 1;
+  };
+
+  const checkWordsId = () => {
+    counter.length > 1
+      ? counter.filter((_) => {
+          return +_.id === +words[card].id;
+        }).length === 0
+        ? counter.push({
+            count: increaseCounterState(),
+            id: words[card].id,
+          })
+        : console.log(`Такое слово уже добавлено в изучение 46`)
+      : counter[0].id !== words[card].id
+      ? counter.push({
+          count: increaseCounterState(),
+          id: words[card].id,
+        })
+      : console.log(`Такое слово уже добавлено в изучение!!!`);
+  };
+
+  const increaseCounter = () => {
+    counter === undefined && selectedButton === 0
+      ? (counter = [{ count: increaseCounterState(), id: words[card].id }])
+      : selectedButton === 0
+      ? checkWordsId()
+      : console.log(`Выученное слово`);
+    console.log(counter);
+  };
+
+  const addCountNext = () => {
+    setCard(card + 1);
+    increaseCounter();
+  };
+
+  const addCountPrev = () => {
+    setCard(card - 1);
+    increaseCounter();
+  };
+
+  const lastCard = () => {
+    increaseCounter();
+    alert(`This is last card`);
+  };
+
+  const firstCard = () => {
+    increaseCounter();
+    alert(`This is first card`);
+  };
 
   const nextCard = () => {
-    card === words.length - 1
-      ? alert(`Это последняя карточка`)
-      : setCard(card + 1);
+    checkButtons()
+      ? card === words.length - 1
+        ? lastCard()
+        : addCountNext()
+      : alert(`select your knowledge`);
+    setSelectedButton(-1);
   };
 
   const prevCard = () => {
-    card === 0 ? alert(`Это первая карточка`) : setCard(card - 1);
+    checkButtons()
+      ? card === 0
+        ? firstCard()
+        : addCountPrev()
+      : alert(`select your knowledge`);
+    setSelectedButton(-1);
   };
 
-  useEffect(() => {
-    console.log(card);
-  }, [card]);
+  const checkButtons = () => {
+    return selectedButton === -1 ? false : true;
+  };
+
+  const handleClick = (i) => {
+    setSelectedButton(i);
+  };
 
   return (
     <React.Fragment>
@@ -41,14 +126,42 @@ const TurnCard = ({ index }) => {
         {words[card] === undefined ? (
           alert(`Карточки не получены`)
         ) : (
-          <WordCard
-            key={words[card].id}
-            word={words[card].word}
-            transcription={words[card].transcription}
-            translate={words[card].translate}
-            explanation={words[card].explanation}
-            theme={words[card].theme}
-          />
+          <Grid
+            sx={{
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
+            <WordCard
+              key={words[card].id}
+              word={words[card].word}
+              transcription={words[card].transcription}
+              translate={words[card].translate}
+              theme={words[card].theme}
+            />
+            <Container
+              sx={{
+                width: "max-content",
+              }}
+            >
+              {buttons.map((_, index) => {
+                return (
+                  <Button
+                    key={_.id}
+                    color={_.color}
+                    size={_.size}
+                    variant={
+                      selectedButton === index ? "contained" : "outlined"
+                    }
+                    className={"knowledge"}
+                    onClick={() => handleClick(index)}
+                  >
+                    {_.text}
+                  </Button>
+                );
+              })}
+            </Container>
+          </Grid>
         )}
         <IconButton onClick={nextCard}>
           <ArrowForwardIos />

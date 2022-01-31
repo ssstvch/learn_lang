@@ -28,8 +28,7 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <Header gamePath={`/game`} homePath={`/`} />
-
+        <Header />
         <Routes>
           <Route path="/game" element={<TurnCard />} />
           <Route path="/" element={<NewWords />} />
