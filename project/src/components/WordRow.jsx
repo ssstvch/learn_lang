@@ -12,76 +12,58 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import DoneIcon from "@mui/icons-material/Done";
 
-const WordRow = ({ word, translate, transcription, theme, id }) => {
-  const [redrow, setRedrow] = React.useState(false);
-  const [inputText, setInputText] = React.useState(-1);
+const tableCell = ["word", "translate", "transcription", "theme"];
 
-  const handleRowClick = () => {
-    setRedrow(!redrow);
-  };
+const WordRow = ({
+  word,
+  translate,
+  transcription,
+  theme,
+  id,
+  redrow,
+  onclick,
+  handleChangeDone,
+  handleChangeRemove,
+}) => {
+  const [inputText, setInputText] = React.useState({
+    word: word,
+    translate: translate,
+    transcription: transcription,
+    theme: theme,
+  });
 
   const handleChange = (e) => {
-    // достаю инпуты редактируемой строки
-    const dataset = e.target.parentNode.dataset.id;
-    let inputParent = document.getElementsByClassName(dataset);
-
-    // создаю массив для хранения значений из инпутов
-    let inputs = [];
-
-    // сохраняю в массив данные из инпутов
-    for (let key of inputParent) {
-      inputs.push(key.children[0].children[0].value);
-    }
-    console.log(inputs);
-
-    // бывает, что возвращается пустой массив, проверка перед рендерингом
-    inputs.length !== 0
-      ? setInputText()
-      : console.log("Нулевой массив, нужно нажать ещё раз");
+    let value = e.target.value;
+    setInputText({ ...inputText, [e.target.name]: value });
   };
 
   return (
     <React.Fragment>
       {redrow ? (
         <TableRow>
-          <TableCell className={`tablecell`}>
-            <TextField
-              size="small"
-              variant="standard"
-              defaultValue={word}
-              className={`tablecell__input ${`${word}-${id}`}`}
-            />
-          </TableCell>
-          <TableCell className={`tablecell`}>
-            <TextField
-              size="small"
-              variant="standard"
-              defaultValue={translate}
-              className={`tablecell__input ${`${word}-${id}`}`}
-            />
-          </TableCell>
-          <TableCell className={`tablecell`}>
-            <TextField
-              size="small"
-              variant="standard"
-              defaultValue={transcription}
-              className={`tablecell__input ${`${word}-${id}`}`}
-            />
-          </TableCell>
-          <TableCell className={`tablecell`}>
-            <TextField
-              size="small"
-              variant="standard"
-              defaultValue={theme}
-              className={`tablecell__input ${`${word}-${id}`}`}
-            />
-          </TableCell>
+          {tableCell.map((_, i) => {
+            return (
+              <TableCell className={`tablecell`} key={`${_}-${i}`}>
+                <TextField
+                  size="small"
+                  variant="standard"
+                  name={_}
+                  value={inputText[_]}
+                  onChange={handleChange}
+                  className={`tablecell__input ${_}-${id}`}
+                />
+              </TableCell>
+            );
+          })}
           <TableCell className={`tablecell__icons`}>
             <Container>
-              <IconButton data-id={`${word}-${id}`} onClick={handleChange}>
+              <IconButton data-id={`${word}-${id}`} onClick={handleChangeDone}>
                 <DoneIcon />
               </IconButton>
-              <IconButton data-id={`${word}-${id}`} onClick={handleRowClick}>
+              <IconButton
+                data-id={`${word}-${id}`}
+                onClick={handleChangeRemove}
+              >
                 <RemoveCircleIcon />
               </IconButton>
             </Container>
@@ -95,7 +77,7 @@ const WordRow = ({ word, translate, transcription, theme, id }) => {
           <TableCell className={`tablecell`}>{theme}</TableCell>
           <TableCell className={`tablecell__icons`}>
             <Container>
-              <IconButton onClick={handleRowClick}>
+              <IconButton onClick={onclick}>
                 <EditIcon />
               </IconButton>
               <IconButton>

@@ -3,7 +3,7 @@ import FormInput from "./FormInput";
 import ButtonReg from "./ButtonReg";
 import styles from "../styles/_form.scss";
 
-import { inputs } from "../data/inputs";
+import { inputs } from "../../data/inputs";
 import { Box } from "@mui/system";
 import { Typography, Button } from "@mui/material";
 

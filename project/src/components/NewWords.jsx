@@ -20,6 +20,19 @@ const tableCell = [
 ];
 
 const NewWords = () => {
+  const [redrow, setRedrow] = React.useState(-1);
+
+  const handleRowClick = (index) => {
+    setRedrow(index);
+  };
+  const handleChangeDone = (e) => {
+    console.log(e);
+    setRedrow(-1);
+  };
+  const handleChangeRemove = () => {
+    setRedrow(-1);
+  };
+
   return (
     <Container sx={{ mt: "8vw", width: "50vw" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="caption table">
@@ -38,16 +51,21 @@ const NewWords = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {words.map((word) => {
-            console.log(word);
+          {words.map((word, i) => {
             return (
               <WordRow
+                // table data
                 key={word.id}
                 id={word.id}
                 word={word.word}
                 translate={word.translate}
                 transcription={word.transcription}
                 theme={word.theme}
+                // table function
+                redrow={redrow === i}
+                onclick={() => handleRowClick(i)}
+                handleChangeDone={handleChangeDone}
+                handleChangeRemove={handleChangeRemove}
               />
             );
           })}
