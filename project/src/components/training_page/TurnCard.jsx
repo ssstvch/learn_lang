@@ -2,8 +2,8 @@ import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import { Grid, IconButton, Typography, Container, Button } from "@mui/material";
 import React, { useState } from "react";
 import WordCard from "./WordCard";
-import Title from "./Title";
-import { words } from "../data/words";
+import Title from "../ui_components/Title";
+import { words } from "../../data/words";
 
 const buttons = [
   {

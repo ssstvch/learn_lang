@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/_newWords.scss";
+import "../../styles/_newWords.scss";
 import {
   Container,
   Table,
@@ -10,7 +10,7 @@ import {
   Paper,
 } from "@mui/material";
 import WordRow from "./WordRow";
-import { words } from "../data/words";
+import { words } from "../../data/words";
 
 const tableCell = [
   { id: "01", name: "Word" },
@@ -21,13 +21,11 @@ const tableCell = [
 
 const NewWords = () => {
   const [redrow, setRedrow] = React.useState(-1);
-
   const handleRowClick = (index) => {
     setRedrow(index);
   };
-  const handleChangeDone = (e) => {
-    console.log(e);
-    setRedrow(-1);
+  const handleChangeDone = (inputError) => {
+    return inputError ? alert("Заполните все поля") : setRedrow(-1);
   };
   const handleChangeRemove = () => {
     setRedrow(-1);

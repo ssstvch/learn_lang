@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "../styles/App.scss";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "./Header";
-import NewWords from "./NewWords";
-import TurnCard from "./TurnCard";
+import NewWords from "./table/NewWords";
+import TurnCard from "./training_page/TurnCard";
 import ErrorPage from "./ErrorPage";
 
 const theme = createTheme({

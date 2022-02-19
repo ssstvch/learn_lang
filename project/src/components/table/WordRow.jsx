@@ -1,11 +1,13 @@
 import React from "react";
-import "../styles/_newWords.scss";
+import "../../styles/_newWords.scss";
 import {
   Container,
   TableRow,
   TableCell,
-  TextField,
   IconButton,
+  FormControl,
+  Input,
+  FormHelperText,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -32,10 +34,17 @@ const WordRow = ({
     theme: theme,
   });
 
+  const [inputError, setInputError] = React.useState(false);
+
   const handleChange = (e) => {
     let value = e.target.value;
+    value.match(/^\s+$/) || value === ""
+      ? setInputError(true)
+      : setInputError(false);
     setInputText({ ...inputText, [e.target.name]: value });
   };
+
+  const iconColor = inputError ? "grey" : "black";
 
   return (
     <React.Fragment>
@@ -44,20 +53,36 @@ const WordRow = ({
           {tableCell.map((_, i) => {
             return (
               <TableCell className={`tablecell`} key={`${_}-${i}`}>
-                <TextField
-                  size="small"
+                <FormControl
+                  error={inputError ? true : false}
                   variant="standard"
-                  name={_}
-                  value={inputText[_]}
-                  onChange={handleChange}
-                  className={`tablecell__input ${_}-${id}`}
-                />
+                >
+                  <Input
+                    name={_}
+                    value={inputText[_]}
+                    onChange={handleChange}
+                    className={`tablecell__input ${_}-${id} ${
+                      inputError ? "error" : ""
+                    }`}
+                  />
+                  {inputError ? (
+                    <FormHelperText id="component-error-text">
+                      Incorrectly entry
+                    </FormHelperText>
+                  ) : (
+                    ""
+                  )}
+                </FormControl>
               </TableCell>
             );
           })}
           <TableCell className={`tablecell__icons`}>
             <Container>
-              <IconButton data-id={`${word}-${id}`} onClick={handleChangeDone}>
+              <IconButton
+                data-id={`${word}-${id}`}
+                sx={{ color: iconColor }}
+                onClick={() => handleChangeDone(inputError)}
+              >
                 <DoneIcon />
               </IconButton>
               <IconButton

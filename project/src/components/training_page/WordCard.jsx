@@ -8,7 +8,7 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import "../styles/_training.scss";
+import "../../styles/_training.scss";
 
 const WordCard = ({ theme, word, transcription, translate }) => {
   const [translateWord, setTranslateWord] = useState(false);
