@@ -22,7 +22,7 @@ const tableCell = [
 const checkWords = (obj) => {
   const checkEnglishWord = /^[a-zA-Z]{2,16}$/g;
   const checkRussianWord = /^[а-яА-ЯёЁ]{2,16}$/g;
-  const checkTranscribation = /^[\[{1}]\D{1,12}[\]{1}]$/g;
+  const checkTranscribation = /^[\[{1}]\D{1,16}[\]{1}]$/g;
 
   let check = 0;
   for (let key in obj) {
