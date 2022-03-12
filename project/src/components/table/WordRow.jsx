@@ -9,6 +9,7 @@ import {
   Input,
   FormHelperText,
 } from "@mui/material";
+import TableInput from "./TableInput";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -44,44 +45,27 @@ const WordRow = ({
     setInputText({ ...inputText, [e.target.name]: value });
   };
 
-  const iconColor = inputError ? "grey" : "black";
-
   return (
     <React.Fragment>
       {redrow ? (
         <TableRow>
           {tableCell.map((_, i) => {
             return (
-              <TableCell className={`tablecell`} key={`${_}-${i}`}>
-                <FormControl
-                  error={inputError ? true : false}
-                  variant="standard"
-                >
-                  <Input
-                    name={_}
-                    value={inputText[_]}
-                    onChange={handleChange}
-                    className={`tablecell__input ${_}-${id} ${
-                      inputError ? "error" : ""
-                    }`}
-                  />
-                  {inputError ? (
-                    <FormHelperText id="component-error-text">
-                      Incorrectly entry
-                    </FormHelperText>
-                  ) : (
-                    ""
-                  )}
-                </FormControl>
-              </TableCell>
+              <TableInput
+                inputError={inputError}
+                handleChange={handleChange}
+                name={_}
+                value={inputText[_]}
+                key={`${_}-${i}`}
+              />
             );
           })}
           <TableCell className={`tablecell__icons`}>
             <Container>
               <IconButton
                 data-id={`${word}-${id}`}
-                sx={{ color: iconColor }}
-                onClick={() => handleChangeDone(inputError)}
+                onClick={() => handleChangeDone(inputText)}
+                disabled={inputError}
               >
                 <DoneIcon />
               </IconButton>

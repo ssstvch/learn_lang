@@ -19,13 +19,51 @@ const tableCell = [
   { id: "04", name: "Theme" },
 ];
 
+const checkWords = (obj) => {
+  const checkEnglishWord = /^[a-zA-Z]{2,16}$/g;
+  const checkRussianWord = /^[а-яА-ЯёЁ]{2,16}$/g;
+  const checkTranscribation = /^[\[{1}]\D{1,12}[\]{1}]$/g;
+
+  let check = 0;
+  for (let key in obj) {
+    let value = obj[key].trim();
+    switch (key) {
+      case "word":
+        checkEnglishWord.test(value) === false
+          ? check++
+          : checkEnglishWord.test(value);
+        break;
+      case "translate":
+        checkRussianWord.test(value) === false
+          ? check++
+          : checkRussianWord.test(value);
+        break;
+      case "transcription":
+        checkTranscribation.test(value) === false
+          ? check++
+          : checkTranscribation.test(value);
+        break;
+      case "theme":
+        checkRussianWord.test(value) === false
+          ? check++
+          : checkRussianWord.test(value);
+        break;
+    }
+  }
+  return check !== 0 ? false : true;
+};
+
 const NewWords = () => {
   const [redrow, setRedrow] = React.useState(-1);
   const handleRowClick = (index) => {
     setRedrow(index);
   };
-  const handleChangeDone = (inputError) => {
-    return inputError ? alert("Заполните все поля") : setRedrow(-1);
+  const handleChangeDone = (inputText) => {
+    let check = checkWords(inputText);
+    check !== false && console.log(inputText);
+    return check === false
+      ? alert("Некорректно введены данные")
+      : setRedrow(-1);
   };
   const handleChangeRemove = () => {
     setRedrow(-1);
