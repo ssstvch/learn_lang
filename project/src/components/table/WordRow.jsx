@@ -1,14 +1,6 @@
 import React from "react";
 import "../../styles/_newWords.scss";
-import {
-  Container,
-  TableRow,
-  TableCell,
-  IconButton,
-  FormControl,
-  Input,
-  FormHelperText,
-} from "@mui/material";
+import { Container, TableRow, TableCell, IconButton } from "@mui/material";
 import TableInput from "./TableInput";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -28,15 +20,16 @@ const WordRow = ({
   handleChangeDone,
   handleChangeRemove,
 }) => {
+  // states
   const [inputText, setInputText] = React.useState({
     word: word,
     translate: translate,
     transcription: transcription,
     theme: theme,
   });
-
   const [inputError, setInputError] = React.useState(false);
 
+  // functions
   const handleChange = (e) => {
     let value = e.target.value;
     value.match(/^\s+$/) || value === ""
@@ -45,6 +38,7 @@ const WordRow = ({
     setInputText({ ...inputText, [e.target.name]: value });
   };
 
+  // component
   return (
     <React.Fragment>
       {redrow ? (

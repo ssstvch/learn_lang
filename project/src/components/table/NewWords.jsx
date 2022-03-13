@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../../styles/_newWords.scss";
 import {
   Container,
@@ -10,7 +10,8 @@ import {
   Paper,
 } from "@mui/material";
 import WordRow from "./WordRow";
-import { words } from "../../data/words";
+import { WordsContext } from "../WordsContext";
+// import { words } from "../../data/words";
 
 const tableCell = [
   { id: "01", name: "Word" },
@@ -19,7 +20,7 @@ const tableCell = [
   { id: "04", name: "Theme" },
 ];
 
-const checkWords = (obj) => {
+const checkInputs = (obj) => {
   const checkEnglishWord = /^[a-zA-Z]{2,16}$/g;
   const checkRussianWord = /^[а-яА-ЯёЁ]{2,16}$/g;
   const checkTranscribation = /^[\[{1}]\D{1,16}[\]{1}]$/g;
@@ -54,12 +55,29 @@ const checkWords = (obj) => {
 };
 
 const NewWords = () => {
-  const [redrow, setRedrow] = React.useState(-1);
+  // global state
+  const [words, setWords] = useContext(WordsContext);
+
+  // local states
+  const [redrow, setRedrow] = useState(-1);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    fetch("http://itgirlschool.justmakeit.ru/api/words")
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        setIsLoaded(true);
+        setWords(result);
+      });
+  }, []);
+
+  // functions
   const handleRowClick = (index) => {
     setRedrow(index);
   };
   const handleChangeDone = (inputText) => {
-    let check = checkWords(inputText);
+    let check = checkInputs(inputText);
     check !== false && console.log(inputText);
     return check === false
       ? alert("Некорректно введены данные")
@@ -69,6 +87,7 @@ const NewWords = () => {
     setRedrow(-1);
   };
 
+  // component
   return (
     <Container sx={{ mt: "8vw", width: "50vw" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="caption table">
@@ -91,12 +110,17 @@ const NewWords = () => {
             return (
               <WordRow
                 // table data
-                key={word.id}
-                id={word.id}
-                word={word.word}
-                translate={word.translate}
+                key={`${word.tags_json}-${word.english}`}
+                word={word.english}
+                translate={word.russian}
                 transcription={word.transcription}
-                theme={word.theme}
+                theme={
+                  word.tags.trim() === "" ? (
+                    <i style={{ color: "gray" }}>без темы</i>
+                  ) : (
+                    word.tags
+                  )
+                }
                 // table function
                 redrow={redrow === i}
                 onclick={() => handleRowClick(i)}
