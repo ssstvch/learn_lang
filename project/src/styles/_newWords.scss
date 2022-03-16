@@ -1,4 +1,9 @@
 .tablecell {
+  &__icons {
+    display: flex !important;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
   &__input {
     font-size: 0.72vw !important;
   }

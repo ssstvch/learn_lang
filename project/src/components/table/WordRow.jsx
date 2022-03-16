@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import "../../styles/_newWords.scss";
-import { Container, TableRow, TableCell, IconButton } from "@mui/material";
-import TableInput from "./TableInput";
+import { TableRow, TableCell, IconButton } from "@mui/material";
+import TableCellInputs from "./TableCellInputs";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import DoneIcon from "@mui/icons-material/Done";
-
-const tableCell = ["english", "russian", "transcription", "tags"];
 
 const WordRow = ({
   english,
@@ -21,6 +17,8 @@ const WordRow = ({
   handleClickRemove,
   handleClickDone,
   handleOpen,
+  inputError,
+  setInputError,
 }) => {
   /* --- local states --- */
   const [inputText, setInputText] = useState({
@@ -31,7 +29,6 @@ const WordRow = ({
     tags: tags,
     tags_json: tags_json,
   });
-  const [inputError, setInputError] = useState(false);
 
   /* --- functions --- */
 
@@ -48,33 +45,14 @@ const WordRow = ({
   return (
     <React.Fragment>
       {redrow ? (
-        <TableRow>
-          {tableCell.map((_, i) => {
-            return (
-              <TableInput
-                inputError={inputError}
-                handleChange={handleChange}
-                name={_}
-                value={inputText[_]}
-                key={`${_}-${i}`}
-              />
-            );
-          })}
-          <TableCell className={`tablecell__icons`}>
-            <Container>
-              <IconButton
-                data-id={id}
-                onClick={(e) => handleClickDone(id, inputText)}
-                disabled={inputError}
-              >
-                <DoneIcon />
-              </IconButton>
-              <IconButton data-id={id} onClick={handleClickRemove}>
-                <RemoveCircleIcon data-id={id} />
-              </IconButton>
-            </Container>
-          </TableCell>
-        </TableRow>
+        <TableCellInputs
+          inputError={inputError}
+          handleChange={handleChange}
+          inputText={inputText}
+          handleClickDone={handleClickDone}
+          handleClickRemove={handleClickRemove}
+          id={id}
+        />
       ) : (
         <TableRow dataset-id={id}>
           <TableCell className={`tablecell`}>{english}</TableCell>
@@ -82,18 +60,16 @@ const WordRow = ({
           <TableCell className={`tablecell`}>{transcription}</TableCell>
           <TableCell className={`tablecell`}>{tags}</TableCell>
           <TableCell className={`tablecell__icons`}>
-            <Container>
-              <IconButton onClick={handleClickEdit}>
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                data-id={id}
-                onClick={() => handleOpen(id)}
-                style={{ zIndex: 2 }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Container>
+            <IconButton onClick={handleClickEdit} className={`icons__button`}>
+              <EditIcon className={`icons__svg`} />
+            </IconButton>
+            <IconButton
+              data-id={id}
+              onClick={() => handleOpen(id)}
+              className={`icons__button`}
+            >
+              <DeleteIcon className={`icons__svg`} />
+            </IconButton>
           </TableCell>
         </TableRow>
       )}

@@ -20,7 +20,7 @@ const Header = ({ gamePath, homePath }) => {
     <React.Fragment>
       <AppBar position="fixed">
         <Container>
-          <Toolbar>
+          <Toolbar sx={{ justifyContent: "space-between", width: "100%" }}>
             <IconButton
               size="large"
               color="inherit"
@@ -28,12 +28,19 @@ const Header = ({ gamePath, homePath }) => {
             >
               <MenuIcon />
             </IconButton>
-            <Container sx={{ m: "1vw 19vw" }}>
+            <Container
+              sx={{
+                m: "0 auto",
+                p: "1.2vw 0",
+                width: "15vw",
+                textAlign: "center",
+              }}
+            >
               <Link to="/">
                 <CardMedia
                   component="img"
-                  height="50%"
-                  width="50%"
+                  height="100%"
+                  width="100%"
                   image="/images/header_logo.png"
                   alt="Learn languages"
                 />
@@ -42,7 +49,6 @@ const Header = ({ gamePath, homePath }) => {
             <IconButton
               size="large"
               color="inherit"
-              sx={{ flexGrow: 1 }}
               onClick={() => setRightMenuOpen(!isRightMenuOpen)}
             >
               <AccountCircle />

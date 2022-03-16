@@ -12,6 +12,7 @@ import {
 import Modal from "../Modal";
 import WordRow from "./WordRow";
 import { WordsContext } from "../WordsContext";
+import TableCellInputs from "./TableCellInputs";
 
 const tableCell = [
   { id: "01", name: "Word" },
@@ -19,21 +20,21 @@ const tableCell = [
   { id: "03", name: "Transcription" },
   { id: "04", name: "Theme" },
 ];
+
 const checkInputs = (obj) => {
   const checkEnglishWord = /^[a-zA-Z]{2,16}$/g;
   const checkRussianWord = /^[а-яА-ЯёЁ]{2,16}$/g;
   const checkTranscribation = /^[/[{1}]\D{1,16}[\]{1}]$/g;
-
   let check = 0;
   for (let text in obj) {
     let value = obj[text].trim();
     switch (text) {
-      case "word":
+      case "english":
         checkEnglishWord.test(value) === false
           ? check++
           : checkEnglishWord.test(value);
         break;
-      case "translate":
+      case "russian":
         checkRussianWord.test(value) === false
           ? check++
           : checkRussianWord.test(value);
@@ -43,13 +44,18 @@ const checkInputs = (obj) => {
           ? check++
           : checkTranscribation.test(value);
         break;
-      case "theme":
+      case "tags":
         checkRussianWord.test(value) === false
           ? check++
           : checkRussianWord.test(value);
         break;
+      case "id":
+        break;
+      case "tags_json":
+        break;
       default:
         console.log(`error in switch`);
+        break;
     }
   }
   return check !== 0 ? false : true;
@@ -59,43 +65,79 @@ const NewWords = () => {
   // global state
   const [words, setWords] = useContext(WordsContext);
 
-  // local states
-  const [redrow, setRedrow] = useState(-1);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [inputID, setInputID] = useState("");
-  const [change, setChange] = useState(false);
+  /* -- local states -- */
+  const [redrow, setRedrow] = useState(-1); // for rows, open edit fields
+  const [isLoaded, setIsLoaded] = useState(false); // table content loaded
+  const [open, setOpen] = useState(false); // modal window, delete row
+  const [inputID, setInputID] = useState(""); // row id, delete row
+  const [change, setChange] = useState(false); // re-render table
+  const [newInputText, setNewInputText] = useState({
+    id: "",
+    english: "",
+    transcription: "",
+    russian: "",
+    tags: "",
+    tags_json: "",
+  });
+  const [inputError, setInputError] = useState(false);
 
   useEffect(() => {
     fetch("http://itgirlschool.justmakeit.ru/api/words")
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        let array = result.reverse();
         setIsLoaded(true);
-        changeWords(result);
+        setWords(array);
       });
   }, []);
 
   /* -- functions -- */
-  const changeWords = (obj) => {
-    setWords(obj);
-  };
   const handleClickEdit = (index) => {
     setRedrow(index);
   };
-  const handleClickRemove = () => {
-    setRedrow(-1);
+  const handleClickRemove = (id) => {
+    +id === 1
+      ? setNewInputText({
+          id: "",
+          english: "",
+          transcription: "",
+          russian: "",
+          tags: "",
+          tags_json: "",
+        })
+      : setRedrow(-1);
   };
 
   // saving field data inputs
-  const handleClickDone = (id, inputText) => {
-    let check = checkInputs(inputText);
+  const handleClickDone = (id, text) => {
+    let check = checkInputs(text);
+    let length = words.length;
     for (let i = 0; i < words.length; i++) {
       if (words[i].id === id) {
         let newWords = words;
-        newWords[i] = inputText;
+        newWords[i] = text;
         setWords(newWords);
       }
+    }
+    //for new word
+    if (id === 1 && check !== false) {
+      let newId = +words[0].id + 1;
+      let newWord = text;
+      console.log(newWord);
+      newWord.id = newId;
+      let newWords = words;
+      console.log(newWords);
+      newWords.unshift(newWord);
+      length + 1 === newWords.length ? setWords(newWords) : console.log(length);
+      setChange(!change);
+      setNewInputText({
+        id: "",
+        english: "",
+        transcription: "",
+        russian: "",
+        tags: "",
+        tags_json: "",
+      });
     }
     return check === false
       ? alert("Некорректно введены данные")
@@ -126,10 +168,22 @@ const NewWords = () => {
     setOpen(false);
   };
 
+  // for new word
+  const handleChange = (e) => {
+    let value = e.target.value;
+    value.match(/^\s+$/) || value === ""
+      ? setInputError(true)
+      : setInputError(false);
+    setNewInputText({ ...newInputText, [e.target.name]: value });
+  };
+
   /* -- component -- */
   return (
-    <Container sx={{ mt: "8vw", width: "50vw" }} component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="caption table">
+    <Container
+      sx={{ m: "8vw auto 3vw auto", pb: "1.5vw", width: "50vw" }}
+      component={Paper}
+    >
+      <Table sx={{ width: "100%" }} aria-label="caption table">
         <TableHead>
           <TableRow>
             {tableCell.map((_) => {
@@ -145,6 +199,15 @@ const NewWords = () => {
           </TableRow>
         </TableHead>
         <TableBody dataset-id={`${change}`}>
+          {/* add new word */}
+          <TableCellInputs
+            inputText={newInputText}
+            handleChange={handleChange}
+            handleClickDone={() => handleClickDone(1, newInputText)}
+            handleClickRemove={() => handleClickRemove(1)}
+            id={1}
+          />
+          {/* table rows */}
           {words.map((word, i) => {
             return (
               <WordRow
@@ -162,9 +225,11 @@ const NewWords = () => {
                 }
                 tags_json={word.tags_json}
                 id={word.id}
+                inputError={inputError}
                 // table function
                 redrow={redrow === i}
                 handleClickEdit={() => handleClickEdit(i)}
+                handleChange={handleChange}
                 handleClickRemove={handleClickRemove}
                 handleClickDone={handleClickDone}
                 handleOpen={handleOpen}
