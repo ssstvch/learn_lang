@@ -22,7 +22,7 @@ const tableCell = [
 const checkInputs = (obj) => {
   const checkEnglishWord = /^[a-zA-Z]{2,16}$/g;
   const checkRussianWord = /^[а-яА-ЯёЁ]{2,16}$/g;
-  const checkTranscribation = /^[\[{1}]\D{1,16}[\]{1}]$/g;
+  const checkTranscribation = /^[/[{1}]\D{1,16}[\]{1}]$/g;
 
   let check = 0;
   for (let text in obj) {
@@ -48,6 +48,8 @@ const checkInputs = (obj) => {
           ? check++
           : checkRussianWord.test(value);
         break;
+      default:
+        console.log(`error in switch`);
     }
   }
   return check !== 0 ? false : true;
@@ -60,6 +62,8 @@ const NewWords = () => {
   // local states
   const [redrow, setRedrow] = useState(-1);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [inputID, setInputID] = useState("");
   const [change, setChange] = useState(false);
 
   useEffect(() => {
@@ -68,11 +72,14 @@ const NewWords = () => {
       .then((result) => {
         console.log(result);
         setIsLoaded(true);
-        setWords(result);
+        changeWords(result);
       });
   }, []);
 
-  // functions
+  /* -- functions -- */
+  const changeWords = (obj) => {
+    setWords(obj);
+  };
   const handleClickEdit = (index) => {
     setRedrow(index);
   };
@@ -95,19 +102,31 @@ const NewWords = () => {
       : setRedrow(-1);
   };
 
-  // delete row
-  const handleDelete = (id) => {
-    for (let i = 0; i < words.length; i++) {
-      if (words[i].id === id) {
-        let newWords = words;
-        newWords.splice(i, 1);
-        setWords(newWords);
-        setChange(!change);
+  // modal functions and delete row
+  const handleOpen = (id) => {
+    setInputID(id);
+    setOpen(true);
+  };
+  const handleClose = (e) => {
+    let choose = e.target.id;
+    let id = +choose.slice(6);
+    console.log(inputID);
+    if (id === 1) {
+      for (let i = 0; i < words.length; i++) {
+        if (+words[i].id === +inputID) {
+          console.log(words[i].id === inputID);
+          let newWords = words;
+          newWords.splice(i, 1);
+          setWords(newWords);
+          setChange(!change);
+          console.log(change);
+        }
       }
     }
+    setOpen(false);
   };
 
-  // component
+  /* -- component -- */
   return (
     <Container sx={{ mt: "8vw", width: "50vw" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="caption table">
@@ -148,10 +167,11 @@ const NewWords = () => {
                 handleClickEdit={() => handleClickEdit(i)}
                 handleClickRemove={handleClickRemove}
                 handleClickDone={handleClickDone}
-                handleDelete={handleDelete}
+                handleOpen={handleOpen}
               />
             );
           })}
+          <Modal open={open} handleClose={handleClose} />
         </TableBody>
       </Table>
     </Container>

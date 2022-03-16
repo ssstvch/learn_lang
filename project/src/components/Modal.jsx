@@ -12,7 +12,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Modal = ({ open, handleClose, id }) => {
+const Modal = ({ open, handleClose }) => {
   return (
     <Dialog
       open={open}
@@ -23,7 +23,7 @@ const Modal = ({ open, handleClose, id }) => {
     >
       <DialogTitle>{"Delete row?"}</DialogTitle>
       <DialogContent>
-        <DialogActions id={id}>
+        <DialogActions>
           <Button onClick={handleClose} id={`dialog${2}`}>
             No
           </Button>

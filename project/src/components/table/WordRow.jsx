@@ -6,7 +6,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import DoneIcon from "@mui/icons-material/Done";
-import Modal from "../Modal";
 
 const tableCell = ["english", "russian", "transcription", "tags"];
 
@@ -21,7 +20,7 @@ const WordRow = ({
   handleClickEdit,
   handleClickRemove,
   handleClickDone,
-  handleDelete,
+  handleOpen,
 }) => {
   /* --- local states --- */
   const [inputText, setInputText] = useState({
@@ -89,7 +88,7 @@ const WordRow = ({
               </IconButton>
               <IconButton
                 data-id={id}
-                onClick={() => handleDelete(id)}
+                onClick={() => handleOpen(id)}
                 style={{ zIndex: 2 }}
               >
                 <DeleteIcon />
