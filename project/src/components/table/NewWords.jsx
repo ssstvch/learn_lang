@@ -9,6 +9,7 @@ import {
   TableBody,
   Paper,
 } from "@mui/material";
+import Modal from "../Modal";
 import WordRow from "./WordRow";
 import { WordsContext } from "../WordsContext";
 
@@ -18,6 +19,39 @@ const tableCell = [
   { id: "03", name: "Transcription" },
   { id: "04", name: "Theme" },
 ];
+const checkInputs = (obj) => {
+  const checkEnglishWord = /^[a-zA-Z]{2,16}$/g;
+  const checkRussianWord = /^[а-яА-ЯёЁ]{2,16}$/g;
+  const checkTranscribation = /^[\[{1}]\D{1,16}[\]{1}]$/g;
+
+  let check = 0;
+  for (let text in obj) {
+    let value = obj[text].trim();
+    switch (text) {
+      case "word":
+        checkEnglishWord.test(value) === false
+          ? check++
+          : checkEnglishWord.test(value);
+        break;
+      case "translate":
+        checkRussianWord.test(value) === false
+          ? check++
+          : checkRussianWord.test(value);
+        break;
+      case "transcription":
+        checkTranscribation.test(value) === false
+          ? check++
+          : checkTranscribation.test(value);
+        break;
+      case "theme":
+        checkRussianWord.test(value) === false
+          ? check++
+          : checkRussianWord.test(value);
+        break;
+    }
+  }
+  return check !== 0 ? false : true;
+};
 
 const NewWords = () => {
   // global state
@@ -26,6 +60,7 @@ const NewWords = () => {
   // local states
   const [redrow, setRedrow] = useState(-1);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [change, setChange] = useState(false);
 
   useEffect(() => {
     fetch("http://itgirlschool.justmakeit.ru/api/words")
@@ -38,11 +73,38 @@ const NewWords = () => {
   }, []);
 
   // functions
-  const handleRowClick = (index) => {
+  const handleClickEdit = (index) => {
     setRedrow(index);
   };
-  const handleChangeRemove = () => {
+  const handleClickRemove = () => {
     setRedrow(-1);
+  };
+
+  // saving field data inputs
+  const handleClickDone = (id, inputText) => {
+    let check = checkInputs(inputText);
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].id === id) {
+        let newWords = words;
+        newWords[i] = inputText;
+        setWords(newWords);
+      }
+    }
+    return check === false
+      ? alert("Некорректно введены данные")
+      : setRedrow(-1);
+  };
+
+  // delete row
+  const handleDelete = (id) => {
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].id === id) {
+        let newWords = words;
+        newWords.splice(i, 1);
+        setWords(newWords);
+        setChange(!change);
+      }
+    }
   };
 
   // component
@@ -63,7 +125,7 @@ const NewWords = () => {
             })}
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody dataset-id={`${change}`}>
           {words.map((word, i) => {
             return (
               <WordRow
@@ -82,10 +144,11 @@ const NewWords = () => {
                 tags_json={word.tags_json}
                 id={word.id}
                 // table function
-                setRedrow={setRedrow}
                 redrow={redrow === i}
-                onclick={() => handleRowClick(i)}
-                handleChangeRemove={handleChangeRemove}
+                handleClickEdit={() => handleClickEdit(i)}
+                handleClickRemove={handleClickRemove}
+                handleClickDone={handleClickDone}
+                handleDelete={handleDelete}
               />
             );
           })}

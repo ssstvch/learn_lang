@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import "../../styles/_newWords.scss";
 import { Container, TableRow, TableCell, IconButton } from "@mui/material";
 import TableInput from "./TableInput";
@@ -6,43 +6,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import DoneIcon from "@mui/icons-material/Done";
-import { WordsContext } from "../WordsContext";
+import Modal from "../Modal";
 
 const tableCell = ["english", "russian", "transcription", "tags"];
-
-const checkInputs = (obj) => {
-  const checkEnglishWord = /^[a-zA-Z]{2,16}$/g;
-  const checkRussianWord = /^[а-яА-ЯёЁ]{2,16}$/g;
-  const checkTranscribation = /^[\[{1}]\D{1,16}[\]{1}]$/g;
-
-  let check = 0;
-  for (let key in obj) {
-    let value = obj[key].trim();
-    switch (key) {
-      case "word":
-        checkEnglishWord.test(value) === false
-          ? check++
-          : checkEnglishWord.test(value);
-        break;
-      case "translate":
-        checkRussianWord.test(value) === false
-          ? check++
-          : checkRussianWord.test(value);
-        break;
-      case "transcription":
-        checkTranscribation.test(value) === false
-          ? check++
-          : checkTranscribation.test(value);
-        break;
-      case "theme":
-        checkRussianWord.test(value) === false
-          ? check++
-          : checkRussianWord.test(value);
-        break;
-    }
-  }
-  return check !== 0 ? false : true;
-};
 
 const WordRow = ({
   english,
@@ -51,16 +17,14 @@ const WordRow = ({
   tags,
   id,
   tags_json,
-  setRedrow,
   redrow,
-  onclick,
-  handleChangeRemove,
+  handleClickEdit,
+  handleClickRemove,
+  handleClickDone,
+  handleDelete,
 }) => {
-  // global state
-  const [words, setWords] = useContext(WordsContext);
-
-  // local states
-  const [inputText, setInputText] = React.useState({
+  /* --- local states --- */
+  const [inputText, setInputText] = useState({
     id: id,
     english: english,
     transcription: transcription,
@@ -68,9 +32,11 @@ const WordRow = ({
     tags: tags,
     tags_json: tags_json,
   });
-  const [inputError, setInputError] = React.useState(false);
+  const [inputError, setInputError] = useState(false);
 
-  // functions
+  /* --- functions --- */
+
+  // check empty fields
   const handleChange = (e) => {
     let value = e.target.value;
     value.match(/^\s+$/) || value === ""
@@ -79,22 +45,7 @@ const WordRow = ({
     setInputText({ ...inputText, [e.target.name]: value });
   };
 
-  const handleChangeDone = (e) => {
-    let check = checkInputs(inputText),
-      rowId = e.target.parentNode.dataset.id;
-    for (let i = 0; i < words.length; i++) {
-      if (words[i].id === rowId) {
-        let newWords = words;
-        newWords[i] = inputText;
-        setWords(newWords);
-      }
-    }
-    return check === false
-      ? alert("Некорректно введены данные")
-      : setRedrow(-1);
-  };
-
-  // component
+  /* --- component --- */
   return (
     <React.Fragment>
       {redrow ? (
@@ -114,13 +65,13 @@ const WordRow = ({
             <Container>
               <IconButton
                 data-id={id}
-                onClick={handleChangeDone}
+                onClick={(e) => handleClickDone(id, inputText)}
                 disabled={inputError}
               >
                 <DoneIcon />
               </IconButton>
-              <IconButton data-id={id} onClick={handleChangeRemove}>
-                <RemoveCircleIcon />
+              <IconButton data-id={id} onClick={handleClickRemove}>
+                <RemoveCircleIcon data-id={id} />
               </IconButton>
             </Container>
           </TableCell>
@@ -133,10 +84,14 @@ const WordRow = ({
           <TableCell className={`tablecell`}>{tags}</TableCell>
           <TableCell className={`tablecell__icons`}>
             <Container>
-              <IconButton onClick={onclick}>
+              <IconButton onClick={handleClickEdit}>
                 <EditIcon />
               </IconButton>
-              <IconButton>
+              <IconButton
+                data-id={id}
+                onClick={() => handleDelete(id)}
+                style={{ zIndex: 2 }}
+              >
                 <DeleteIcon />
               </IconButton>
             </Container>

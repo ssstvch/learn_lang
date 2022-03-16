@@ -1,5 +1,4 @@
 import React from "react";
-import { WordsProvider } from "./WordsContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "../styles/App.scss";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -27,18 +26,16 @@ const theme = createTheme({
 
 const App = () => {
   return (
-    <WordsProvider>
-      <Router>
-        <ThemeProvider theme={theme}>
-          <Header />
-          <Routes>
-            <Route path="/game" element={<TurnCard />} />
-            <Route path="/" element={<NewWords />} />
-            <Route path="/*" element={<ErrorPage />} />
-          </Routes>
-        </ThemeProvider>
-      </Router>
-    </WordsProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <Header />
+        <Routes>
+          <Route path="/game" element={<TurnCard />} />
+          <Route path="/" element={<NewWords />} />
+          <Route path="/*" element={<ErrorPage />} />
+        </Routes>
+      </ThemeProvider>
+    </Router>
   );
 };
 
