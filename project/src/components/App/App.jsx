@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "../styles/App.scss";
+import "../../styles/App.scss";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Header from "./Header";
-import NewWords from "./table/NewWords";
-import TurnCard from "./training_page/TurnCard";
-import ErrorPage from "./ErrorPage";
+import Header from "../ui_components/Header";
+import NewWords from "../table/NewWords";
+import TurnCard from "../training_page/TurnCard";
+import ErrorPage from "../ui_components/ErrorPage";
 
 const theme = createTheme({
   palette: {

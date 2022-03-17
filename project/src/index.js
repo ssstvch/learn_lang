@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { WordsProvider } from "./components/WordsContext";
+import { WordsProvider } from "./components/App/WordsContext";
 
 import "./index.css";
-import App from "./components/App";
+import App from "./components/App/App";
 import { ThemeContext } from "@mui/styled-engine";
 
 ReactDOM.render(

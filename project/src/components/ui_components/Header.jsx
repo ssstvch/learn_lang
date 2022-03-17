@@ -8,8 +8,8 @@ import {
 } from "@mui/material/";
 import { AccountCircle } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
-import LeftMenu from "./LeftMenu";
-import RightMenu from "./RightMenu";
+import LeftMenu from "../App/LeftMenu";
+import RightMenu from "../App/RightMenu";
 import { Link } from "react-router-dom";
 
 const Header = ({ gamePath, homePath }) => {

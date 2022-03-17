@@ -8,11 +8,15 @@ import {
   TableCell,
   TableBody,
   Paper,
+  CircularProgress,
 } from "@mui/material";
-import Modal from "../Modal";
+import ModalSelection from "../ui_components/ModalSelection";
 import WordRow from "./WordRow";
-import { WordsContext } from "../WordsContext";
+import { WordsContext } from "../App/WordsContext";
 import TableCellInputs from "./TableCellInputs";
+import ModalMsg from "../ui_components/ModalMsg";
+import { Box } from "@mui/system";
+import { TableRows } from "@mui/icons-material";
 
 const tableCell = [
   { id: "01", name: "Word" },
@@ -26,6 +30,7 @@ const checkInputs = (obj) => {
   const checkRussianWord = /^[а-яА-ЯёЁ]{2,16}$/g;
   const checkTranscribation = /^[/[{1}]\D{1,16}[\]{1}]$/g;
   let check = 0;
+  console.log(obj);
   for (let text in obj) {
     let value = obj[text].trim();
     switch (text) {
@@ -78,8 +83,8 @@ const NewWords = () => {
     russian: "",
     tags: "",
     tags_json: "",
-  });
-  const [inputError, setInputError] = useState(false);
+  }); // new word
+  const [inputError, setInputError] = useState(false); // error for inputs
 
   useEffect(() => {
     fetch("http://itgirlschool.justmakeit.ru/api/words")
@@ -124,7 +129,7 @@ const NewWords = () => {
       let newId = +words[0].id + 1;
       let newWord = text;
       console.log(newWord);
-      newWord.id = newId;
+      newWord.id = `${newId}`;
       let newWords = words;
       console.log(newWords);
       newWords.unshift(newWord);
@@ -196,48 +201,64 @@ const NewWords = () => {
                 </TableCell>
               );
             })}
+            <TableCell />
           </TableRow>
         </TableHead>
-        <TableBody dataset-id={`${change}`}>
-          {/* add new word */}
-          <TableCellInputs
-            inputText={newInputText}
-            handleChange={handleChange}
-            handleClickDone={() => handleClickDone(1, newInputText)}
-            handleClickRemove={() => handleClickRemove(1)}
-            id={1}
-          />
-          {/* table rows */}
-          {words.map((word, i) => {
-            return (
-              <WordRow
-                // table data
-                key={`${word.tags_json}-${word.english}`}
-                english={word.english}
-                russian={word.russian}
-                transcription={word.transcription}
-                tags={
-                  word.tags.trim() === "" ? (
-                    <i style={{ color: "gray" }}>без темы</i>
-                  ) : (
-                    word.tags
-                  )
-                }
-                tags_json={word.tags_json}
-                id={word.id}
-                inputError={inputError}
-                // table function
-                redrow={redrow === i}
-                handleClickEdit={() => handleClickEdit(i)}
-                handleChange={handleChange}
-                handleClickRemove={handleClickRemove}
-                handleClickDone={handleClickDone}
-                handleOpen={handleOpen}
-              />
-            );
-          })}
-          <Modal open={open} handleClose={handleClose} />
-        </TableBody>
+        {isLoaded ? (
+          <TableBody dataset-id={`${change}`}>
+            {/* add new word */}
+            <TableCellInputs
+              inputText={newInputText}
+              handleChange={handleChange}
+              handleClickDone={() => handleClickDone(1, newInputText)}
+              handleClickRemove={() => handleClickRemove(1)}
+              id={1}
+            />
+            {/* table rows */}
+            {words.map((word, i) => {
+              return (
+                <WordRow
+                  // table data
+                  key={`${word.tags_json}-${word.english}`}
+                  english={word.english}
+                  russian={word.russian}
+                  transcription={word.transcription}
+                  tags={
+                    word.tags.trim() === "" ? (
+                      <i style={{ color: "gray" }}>без темы</i>
+                    ) : (
+                      word.tags
+                    )
+                  }
+                  tags_json={word.tags_json}
+                  id={word.id}
+                  inputError={inputError}
+                  // table function
+                  redrow={redrow === i}
+                  handleClickEdit={() => handleClickEdit(i)}
+                  setInputError={setInputError}
+                  handleChange={handleChange}
+                  handleClickRemove={handleClickRemove}
+                  handleClickDone={handleClickDone}
+                  handleOpen={handleOpen}
+                />
+              );
+            })}
+            <ModalSelection open={open} handleClose={handleClose} />
+          </TableBody>
+        ) : (
+          <TableBody>
+            <TableRow>
+              <TableCell />
+              <TableCell />
+              <TableCell sx={{ p: "3vw 0", pl: "1.5vw" }}>
+                <CircularProgress size={50} sx={{ m: "0 auto" }} />
+              </TableCell>
+              <TableCell />
+              <TableCell />
+            </TableRow>
+          </TableBody>
+        )}
       </Table>
     </Container>
   );
