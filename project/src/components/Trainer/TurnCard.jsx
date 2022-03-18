@@ -1,9 +1,9 @@
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import { Grid, IconButton, Typography, Container, Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import WordCard from "./WordCard";
 import Title from "../ui_components/Title";
-import { words } from "../../data/words";
+import { WordsContext } from "../App/WordsContext";
 
 const buttons = [
   {
@@ -25,6 +25,7 @@ const buttons = [
 let counter = undefined;
 
 const TurnCard = ({ index }) => {
+  const { words } = useContext(WordsContext);
   const [card, setCard] = useState(index ?? 0);
   const [selectedButton, setSelectedButton] = useState(-1);
   const [wordsCount, setWordsCount] = useState(0);
@@ -134,10 +135,12 @@ const TurnCard = ({ index }) => {
           >
             <WordCard
               key={words[card].id}
-              word={words[card].word}
+              word={words[card].english}
               transcription={words[card].transcription}
-              translate={words[card].translate}
-              theme={words[card].theme}
+              translate={words[card].russian}
+              theme={
+                words[card].tags === "" ? <i>без темы</i> : words[card].tags
+              }
             />
             <Container
               sx={{

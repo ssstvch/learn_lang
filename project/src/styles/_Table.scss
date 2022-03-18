@@ -11,3 +11,17 @@
     padding: 0 !important;
   }
 }
+
+.table-conatiner {
+  margin: 8vw auto 3vw auto;
+  padding: 1vw 1.5vw 1vw 1vw;
+  width: 55vw !important;
+}
+
+.table {
+  width: 100%;
+  &__headers {
+    width: 10.2vw;
+    padding: 1.2vw 0.7vw;
+  }
+}

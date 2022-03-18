@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "../../styles/App.scss";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../ui_components/Header";
-import NewWords from "../table/NewWords";
-import TurnCard from "../training_page/TurnCard";
+import TableWords from "../Table/index";
+import TurnCard from "../Trainer/TurnCard";
 import ErrorPage from "../ui_components/ErrorPage";
 
 const theme = createTheme({
@@ -31,7 +31,7 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/game" element={<TurnCard />} />
-          <Route path="/" element={<NewWords />} />
+          <Route path="/" element={<TableWords />} />
           <Route path="/*" element={<ErrorPage />} />
         </Routes>
       </ThemeProvider>
