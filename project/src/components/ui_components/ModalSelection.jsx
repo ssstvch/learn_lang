@@ -6,13 +6,15 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
+import { TableContext } from "../Table/tableContext";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ModalSelection = ({ open, handleClose }) => {
+const ModalSelection = () => {
+  const { open, handleClose } = useContext(TableContext);
   return (
     <Dialog
       open={open}

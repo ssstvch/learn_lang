@@ -6,36 +6,32 @@ import TableInput from "./TableInput";
 import { WordsContext } from "../App/WordsContext";
 import { TableContext } from "./tableContext";
 
-const tableCellInputs = ["english", "russian", "transcription", "tags"];
-
-const TableCellInputs = ({ id, word, setEdit }) => {
+const TableCellInputs = ({ id, word }) => {
   const { inputError, handleClickDone } = useContext(WordsContext);
-  const { inputText, setInputText, handleChange, handleClickRemove } =
-    useContext(TableContext);
+  const {
+    tableCell,
+    inputText,
+    getInputText,
+    handleChange,
+    handleClickRemove,
+    closeEdit,
+  } = useContext(TableContext);
 
   useEffect(() => {
-    word !== undefined && word !== null
-      ? setInputText({
-          id: word.id,
-          english: word.english,
-          transcription: word.transcription,
-          russian: word.russian,
-          tags: word.tags,
-          tags_json: word.tags_json,
-        })
-      : console.log("set");
+    getInputText(word);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <TableRow>
-      {tableCellInputs.map((_, i) => {
+      {tableCell.map((_, i) => {
         return (
           <TableInput
             inputError={inputError}
             handleChange={(e) => handleChange(e)}
-            name={_}
-            value={inputText[_]}
-            key={`${_}-${i}`}
+            name={_.inputName}
+            value={inputText[_.inputName]}
+            key={`${_.inputName}-${i}`}
           />
         );
       })}
@@ -44,7 +40,7 @@ const TableCellInputs = ({ id, word, setEdit }) => {
           data-id={id}
           onClick={() => {
             handleClickDone(id, inputText)
-              ? setEdit(-1)
+              ? closeEdit()
               : console.log(`something went wrong..`);
           }}
           disabled={inputError}
@@ -55,7 +51,7 @@ const TableCellInputs = ({ id, word, setEdit }) => {
           data-id={id}
           onClick={() => {
             handleClickRemove()
-              ? setEdit(-1)
+              ? closeEdit()
               : console.log(`something went wrong..`);
           }}
         >

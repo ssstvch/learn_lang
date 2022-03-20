@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "../../styles/App.scss";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { TableProvider } from "../Table/tableContext";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../ui_components/Header";
 import TableWords from "../Table/index";
@@ -29,11 +30,13 @@ const App = () => {
     <Router>
       <ThemeProvider theme={theme}>
         <Header />
-        <Routes>
-          <Route path="/game" element={<TurnCard />} />
-          <Route path="/" element={<TableWords />} />
-          <Route path="/*" element={<ErrorPage />} />
-        </Routes>
+        <TableProvider>
+          <Routes>
+            <Route path="/game" element={<TurnCard />} />
+            <Route path="/" element={<TableWords />} />
+            <Route path="/*" element={<ErrorPage />} />
+          </Routes>
+        </TableProvider>
       </ThemeProvider>
     </Router>
   );
