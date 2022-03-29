@@ -32,13 +32,7 @@ const Body = () => {
       {/* table rows */}
       {words.map((word, i) => {
         return (
-          <WordRow
-            // table data
-            word={word}
-            key={`${word.tags_json}-${word.id}`}
-            // table function
-            index={i}
-          />
+          <WordRow key={`${word.tags_json}-${word.id}`} word={word} index={i} />
         );
       })}
       <ModalSelection />
